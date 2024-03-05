@@ -6,11 +6,8 @@
 
 Before running this environment, ensure that the following requirements are met:
 
-## 1. Create a Conda Environment
 
-It's recommended to create a Conda environment with Python 3.11. 
-
-## 2. Clone and Install Python URX Package
+## 1. Clone and Install Python URX Package
 
 - Clone the Python URX repository from GitHub:
   ```
@@ -25,7 +22,7 @@ It's recommended to create a Conda environment with Python 3.11.
   pip install -e .
   ```
 
-## 3. Install Math3d Package
+## 2. Install Math3d Package
 
 Install the `math3d` package version 3.4.1:
 
@@ -33,7 +30,7 @@ Install the `math3d` package version 3.4.1:
 pip install math3d==3.4.1
 ```
 
-## 4. Test the Environment
+## 3. Test the Environment
 
 Run the provided `general_test.py` example to ensure everything is set up correctly:
 
@@ -42,4 +39,7 @@ python general_test.py
 ```
 
 ---
+
+
+It is recommended to create a Conda environment with Python 3.11. 
 
