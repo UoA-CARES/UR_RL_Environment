@@ -23,7 +23,7 @@ if __name__ == "__main__":
         do_wait = False
 
     rob = urx.Robot("172.17.0.2")
-    # rob = urx.Robot("localhost")
+
     rob.set_tcp((0, 0, 0, 0, 0, 0))
     rob.set_payload(0.5, (0, 0, 0))
     try:

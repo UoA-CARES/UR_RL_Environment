@@ -32,7 +32,7 @@ pip install math3d==3.4.1
 
 ## 3. Test the Environment
 
-Run the provided `general_test.py` example to ensure everything is set up correctly:
+Run the provided `general_test_example.py` example to ensure everything is set up correctly:
 
 ```
 python general_test.py
