@@ -1,17 +1,22 @@
+
+import os
 import json
 import urx
 import time
 from math import pi
 import logging
 from pathlib import Path
+
 import collections
-collections.Iterable = collections.abc.Iterable
+collections.Iterable = collections.abc.Iterable # Need this for math3d lib issues
 
 
 logging.basicConfig(level=logging.INFO)
 
+
 def read_config_file():
-    config_path = Path.home() / 'UoA_Repository' / 'UR_RL_Environment' / 'config' / 'robot_config.json' # todo fix this
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, '..', 'config', 'robot_config.json')
     with open(config_path) as f:
         config = json.load(f)
     return config
@@ -58,7 +63,6 @@ def move_tcp(robot):
     a = 0.3
 
     t = robot.get_pose()        # Orientation and Vector, Transformation from base to tcp
-
     t.orient.rotate_zb(pi / 8)  # rotate tcp around base z
     robot.set_pose(t, vel=v, acc=a) # move tcp to point and orientation defined by a transformation
     t.orient.rotate_zb(-pi / 8)  # rotate tcp around base z
@@ -103,16 +107,38 @@ def move_robot_p(robot):
 
         pose[2] += l
         robot.movep(pose, acc=a, vel=v, wait=True)
-
         pose[2] -= l
         robot.movep(pose, acc=a, vel=v, wait=True)
-
         pose[1] += l
         robot.movep(pose, acc=a, vel=v, wait=True)
-
         pose[1] -= l
         robot.movep(pose, acc=a, vel=v, wait=True)
 
+    except Exception as e:
+        pass
+        logging.info("An error occurred while moving the robot:", e)
+
+
+def test_function(robot):
+
+    try:
+        joint_state = robot.getj()  # get joint state in radians
+        TCP_pose    = robot.getl()  # get TCP pose (x, y, z, Rx,Ry, Rz), in base coordinate
+
+        print(TCP_pose)
+
+        TCP_pose[0] = 0.1
+        robot.movep(TCP_pose, acc=0.8, vel=0.1, relative=False, wait=True) # absolute move wrt base coordinate
+        TCP_pose = robot.getl()
+        print(TCP_pose)
+
+        #relative move in base coordinate
+        #robot.translate((0, 0, -0.2), acc=0.8, vel=0.1)  # move the tool,  # relative move in base coordinate, just move
+        robot.translate_tool((0, 0, 0.2), acc=0.8, vel=0.1)
+
+        # t = robot.get_pose()  # Orientation and Vector, Transformation from base to tcp
+        # t.orient.rotate_zb(pi / 8)  # rotate tcp around base z
+        # robot.set_pose(t, vel=0.1, acc=0.8)  # move tcp to point and orientation defined by a transformation
 
     except Exception as e:
         pass
@@ -120,21 +146,30 @@ def move_robot_p(robot):
 
 
 
+def robot_home(robot):
+    robot.movej()
+
+
+def swinging(robot):
+    print(robot.getj())
+
 
 def main():
+
     config = read_config_file()
     ip_address_robot = config['ip_robot']
 
-    robot = urx.Robot(ip_address_robot, use_rt=True, urFirm=5.1)
-
+    robot = urx.Robot(ip_address_robot, use_rt=True, urFirm=config['urFirm'])
     robot.set_tcp((0, 0, 0, 0, 0, 0)) # Set tool central point
     robot.set_payload(0.5, (0, 0, 0)) # Kg
 
-    read_data_from_robot(robot=robot)
-    #move_robot_simple(robot=robot)
 
-    # move_robot_p(robot=robot)
-    move_robot_joint(robot)
+    test_function(robot)
+    # read_data_from_robot(robot=robot)
+    # move_robot_simple(robot=robot)
+
+    # # move_robot_p(robot=robot)
+    # move_robot_joint(robot)
     # move_tcp(robot)
 
 
