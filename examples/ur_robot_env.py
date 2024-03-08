@@ -1,6 +1,8 @@
 import os
 import json
 import urx
+import math
+import random
 from math import pi
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +17,11 @@ class Env:
         self.initial_set_up()
         self.vel = 0.1
         self.acc = 0.8
+
+        # ellipse area
+        self.h, self.k = (0.14, 0.7)  # central_point in (x, z)
+        self.a = 0.14  # Semi-major axis length
+        self.b = 0.20  # Semi-minor axis length
 
     def initial_set_up(self):
         self.robot.set_tcp((0, 0, 0, 0, 0, 0))  # Set tool central point
@@ -35,10 +42,35 @@ class Env:
         self.robot.movej(reset_pose, vel=self.vel, acc=self.acc, wait=True)
         logging.info("Robot at reset pose")
 
+    def test_point_inside(self, x, z):
+        ellipse_eq = ((x - self.h) ** 2) / (self.a ** 2) + ((z - self.k) ** 2) / (self.b ** 2)
+        if ellipse_eq <= 1:
+            pass
+        else:
+            try:
+                raise Exception("Point is outside the boundaries of the ellipse")
+            except Exception as e:
+                logging.info("out of boundaries", e)
+
+
+    def working_area(self):
+        theta = random.uniform(0, 2 * math.pi)  # Generate random angle in radians
+        radio = math.sqrt(random.uniform(0, 1))
+
+        x = self.h + self.a * radio * math.cos(theta)
+        z = self.k + self.b * radio * math.sin(theta)
+        y = -0.5  # keep the Y axis fix
+        self.test_point_inside(x, z)
+        return x, y, z
+
+
     def move_test(self):
+        tool_pose = self.robot.getl()
 
-
-
+        desire_point = self.working_area()
+        tool_pose[:3] = desire_point # keep the orientation
+        self.robot.movel(tool_pose, acc=self.acc, vel=self.vel)
+        self.robot.movel(tool_pose, acc=self.acc, vel=self.vel)
 
 def read_config_file():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,9 +88,14 @@ def main():
 
 
     robot_env = Env(robot)
-    joints = robot_env.read_joint_state()
+    #joints = robot_env.read_joint_state()
 
     robot_env.home_position()
+    robot_env.move_reset_position()
+
+    for _ in range(10):
+        robot_env.move_test()
+
     robot_env.move_reset_position()
 
     robot.close()
