@@ -15,13 +15,17 @@ class Env:
     def __init__(self, robot):
         self.robot = robot
         self.initial_set_up()
-        self.vel = 0.1
-        self.acc = 0.8
+        self.vel = 0.9
+        self.acc = 1.0
 
         # ellipse area
         self.h, self.k = (0.14, 0.7)  # central_point in (x, z)
-        self.a = 0.14  # Semi-major axis length
-        self.b = 0.20  # Semi-minor axis length
+        self.a = 0.40  # Semi-major axis length  x-axis
+        self.b = 0.05  # Semi-minor axis length   z-axis
+
+        # wrist range
+        self.min_angle_deg  = -50
+        self. max_angle_deg = 50
 
     def initial_set_up(self):
         self.robot.set_tcp((0, 0, 0, 0, 0, 0))  # Set tool central point
@@ -53,7 +57,14 @@ class Env:
                 logging.info("out of boundaries", e)
 
 
-    def working_area(self):
+    def working_angle_wrist(self):
+        min_angle_rad = math.radians(self.min_angle_deg)
+        max_angle_rad = math.radians(self.max_angle_deg)
+        random_angle_rad = random.uniform(min_angle_rad, max_angle_rad)
+        return random_angle_rad
+
+
+    def working_area_x_z(self):
         theta = random.uniform(0, 2 * math.pi)  # Generate random angle in radians
         radio = math.sqrt(random.uniform(0, 1))
 
@@ -63,14 +74,23 @@ class Env:
         self.test_point_inside(x, z)
         return x, y, z
 
+    def tool_wrist_3_movement(self):
+        desire_point = self.working_area_x_z()  # (x, y, z) w.r.t to the base
+        desire_angle = self.working_angle_wrist() # wrist3 angle
 
-    def move_test(self):
+        t = self.robot.get_pose()  # Orientation and Vector, Transformation matrix from base to tcp
+        t.orient.rotate_yb(desire_angle)  # rotate tcp around base y
+        t.pos[:3] = desire_point  # translate tcp in x,y,z  w.r.t base
+
+        self.robot.set_pose(t, vel=self.vel, acc=self.acc)  # move tcp to point and orientation defined by a transformation
+
+    def tool_move_test(self):
         tool_pose = self.robot.getl()
-
-        desire_point = self.working_area()
+        desire_point = self.working_area_x_z() # (x, y, z) w.r.t to the base
         tool_pose[:3] = desire_point # keep the orientation
         self.robot.movel(tool_pose, acc=self.acc, vel=self.vel)
-        self.robot.movel(tool_pose, acc=self.acc, vel=self.vel)
+
+
 
 def read_config_file():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -90,11 +110,12 @@ def main():
     robot_env = Env(robot)
     #joints = robot_env.read_joint_state()
 
-    robot_env.home_position()
+    #robot_env.home_position()
     robot_env.move_reset_position()
 
     for _ in range(10):
-        robot_env.move_test()
+        #robot_env.tool_move_test()
+        robot_env.tool_wrist_3_movement()
 
     robot_env.move_reset_position()
 

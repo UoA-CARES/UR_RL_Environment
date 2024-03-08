@@ -145,7 +145,6 @@ def test_function(robot):
         logging.info("An error occurred while moving the robot:", e)
 
 
-
 def robot_home(robot):
     robot.movej()
 
