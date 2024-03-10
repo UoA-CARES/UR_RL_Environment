@@ -140,6 +140,9 @@ def test_function(robot):
         # t.orient.rotate_zb(pi / 8)  # rotate tcp around base z
         # robot.set_pose(t, vel=0.1, acc=0.8)  # move tcp to point and orientation defined by a transformation
 
+
+
+
     except Exception as e:
         pass
         logging.info("An error occurred while moving the robot:", e)
