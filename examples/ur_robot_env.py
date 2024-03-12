@@ -16,20 +16,20 @@ class Env:
         self.robot = robot
         self.initial_set_up()
         self.vel = 1.0
-        self.acc = 1.0
+        self.acc = 3.0
 
         self.home_x = 0.14
         self.home_y = -0.50
         self.home_z = 0.40
 
         # wrist 3 range
-        self.min_angle_deg = -10
-        self.max_angle_deg = 10
+        self.min_angle_deg = -40
+        self.max_angle_deg = 40
 
         # ellipse area
         self.h, self.k = (self.home_x, self.home_z)  # central_point in (x, z)
-        self.a = 0.40  # Semi-major axis length  x-axis
-        self.b = 0.05  # Semi-minor axis length  z-axis
+        self.a = 0.30  # Semi-major axis length  x-axis
+        self.b = 0.25  # Semi-minor axis length  z-axis
 
 
     def initial_set_up(self):
