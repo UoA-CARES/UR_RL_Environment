@@ -54,6 +54,7 @@ def move_robot_simple(robot):
         robot.translate_tool((0, 0, -l), acc=a, vel=v)
         robot.translate_tool((0, 0, l), acc=a, vel=v)
 
+
     except Exception as e:
         pass
         logging.info("An error occurred while moving the robot:", e)
@@ -67,6 +68,7 @@ def move_tcp(robot):
     robot.set_pose(t, vel=v, acc=a) # move tcp to point and orientation defined by a transformation
     t.orient.rotate_zb(-pi / 8)  # rotate tcp around base z
     robot.set_pose(t, vel=v, acc=a)  # move tcp to point and orientation defined by a transformation
+
 
 
 def move_robot_joint(robot):
