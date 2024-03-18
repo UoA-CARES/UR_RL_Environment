@@ -170,7 +170,7 @@ def main():
 
     for i in range(1):
         pass
-        #robot_env.tool_move_pose_test()
+        robot_env.tool_move_pose_test()
         robot_env.hard_code_solution()
 
     robot_env.home_reset_position()
