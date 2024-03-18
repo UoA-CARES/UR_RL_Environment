@@ -29,7 +29,7 @@ def main():
     env.starting_position() # just making sure the joint are in the right position for initialization
     env.robot_home_position()
 
-    for i in range(100):
+    for i in range(1):
         env.hard_code_solution()
 
     env.robot_home_position()

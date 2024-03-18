@@ -99,24 +99,29 @@ class Environment:
 
     def hard_code_solution(self):
 
-        for i in range(5):
+        for _ in range(5):
+
             # pose 1
-            desire_position_1    = (self.home_position[0]+0.03, self.home_position[1], self.home_position[2])
+            desire_position_1    = (self.home_position[0]-0.15, self.home_position[1], self.home_position[2])
             desire_orientation_1 = (self.home_orientation[0], self.home_orientation[1]+30, self.home_orientation[2])
             desire_pose_1 = self.check_point((desire_position_1+desire_orientation_1))
-            self.robot.movel(desire_pose_1, acc=self.acc, vel=self.vel)
+
+            # pose 3
+            desire_position_3 = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.02)
+            desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            desire_pose_3 = self.check_point((desire_position_3 + desire_orientation_3))
 
             # pose 2
-            desire_position_2    = (self.home_position[0]-0.03, self.home_position[1], self.home_position[2])
+            desire_position_2    = (self.home_position[0]+0.15, self.home_position[1], self.home_position[2])
             desire_orientation_2 = (self.home_orientation[0], self.home_orientation[1]-30, self.home_orientation[2])
             desire_pose_2 = self.check_point((desire_position_2+desire_orientation_2))
-            self.robot.movel(desire_pose_2, acc=self.acc, vel=self.vel)
 
-        # pose 3
-        desire_position_3    = (self.home_position[0], self.home_position[1], self.home_position[2]+0.1)
-        desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
-        desire_pose_3 = self.check_point((desire_position_3+desire_orientation_3))
-        self.robot.movel(desire_pose_3, acc=self.acc, vel=self.vel)
+            self.robot.movels([desire_pose_1, desire_pose_3, desire_pose_2, desire_pose_3], vel=self.vel, acc=self.acc, radius=0.01)
+
+
+
+
+
 
 
     def get_state(self):
