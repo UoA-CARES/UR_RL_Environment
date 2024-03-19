@@ -99,24 +99,54 @@ class Environment:
 
     def hard_code_solution(self):
 
-        for _ in range(5):
+        for _ in range(1):
+
+            # # pose 1
+            # desire_position_1    = (self.home_position[0]-0.15, self.home_position[1], self.home_position[2])
+            # desire_orientation_1 = (self.home_orientation[0], self.home_orientation[1]+30, self.home_orientation[2])
+            # desire_pose_1 = self.check_point((desire_position_1+desire_orientation_1))
+            #
+            # # pose 3
+            # desire_position_3 = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.02)
+            # desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            # desire_pose_3 = self.check_point((desire_position_3 + desire_orientation_3))
+            #
+            # # pose 2
+            # desire_position_2    = (self.home_position[0]+0.15, self.home_position[1], self.home_position[2])
+            # desire_orientation_2 = (self.home_orientation[0], self.home_orientation[1]-30, self.home_orientation[2])
+            # desire_pose_2 = self.check_point((desire_position_2+desire_orientation_2))
+
+            # self.robot.movels([desire_pose_1, desire_pose_3, desire_pose_2, desire_pose_3], vel=self.vel, acc=self.acc, radius=0.01)
+
 
             # pose 1
-            desire_position_1    = (self.home_position[0]-0.15, self.home_position[1], self.home_position[2])
-            desire_orientation_1 = (self.home_orientation[0], self.home_orientation[1]+30, self.home_orientation[2])
-            desire_pose_1 = self.check_point((desire_position_1+desire_orientation_1))
+            desire_position_1    = (self.home_position[0]-0.15, self.home_position[1], self.home_position[2]+0.03)
+            desire_orientation_1 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            desire_pose_1 = self.check_point((desire_position_1 + desire_orientation_1))
+
+            # pose 2
+            desire_position_2    = (self.home_position[0]+0.15, self.home_position[1], self.home_position[2]-0.03)
+            desire_orientation_2 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            desire_pose_2 = self.check_point((desire_position_2 + desire_orientation_2))
 
             # pose 3
-            desire_position_3 = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.02)
+            desire_position_3    = (self.home_position[0]+0.15, self.home_position[1], self.home_position[2]+0.04)
             desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
             desire_pose_3 = self.check_point((desire_position_3 + desire_orientation_3))
 
-            # pose 2
-            desire_position_2    = (self.home_position[0]+0.15, self.home_position[1], self.home_position[2])
-            desire_orientation_2 = (self.home_orientation[0], self.home_orientation[1]-30, self.home_orientation[2])
-            desire_pose_2 = self.check_point((desire_position_2+desire_orientation_2))
+            # pose 4
+            desire_position_4    = (self.home_position[0], self.home_position[1], self.home_position[2])
+            desire_orientation_4 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            desire_pose_4 = self.check_point((desire_position_4 + desire_orientation_4))
 
-            self.robot.movels([desire_pose_1, desire_pose_3, desire_pose_2, desire_pose_3], vel=self.vel, acc=self.acc, radius=0.01)
+            # pose 5
+            desire_position_5    = (self.home_position[0], self.home_position[1], self.home_position[2]+0.05)
+            desire_orientation_5 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+            desire_pose_5 = self.check_point((desire_position_5 + desire_orientation_5))
+
+            self.robot.movels([desire_pose_1, desire_pose_2, desire_pose_3, desire_pose_4, desire_pose_5], vel=self.vel, acc=self.acc, radius=0.01)
+
+
 
 
 
