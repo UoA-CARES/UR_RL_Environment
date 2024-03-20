@@ -89,21 +89,23 @@ class Environment:
         logging.info("Robot at home position")
 
     def reset_task(self):
-        #self.robot_home_position()
+        # self.robot_home_position()
+        time.sleep(2)
 
         # todo, can add if statement when the sensor is mounted, If ball in cup do
-        desire_orientation = (self.home_orientation[0], self.home_orientation[1] + 140, self.home_orientation[2])
+        desire_orientation = (self.home_orientation[0], self.home_orientation[1] + 100, self.home_orientation[2])
         rotate_move_pose = prepare_point((self.home_position + desire_orientation))
         self.robot.movel(rotate_move_pose, vel=0.2, acc=1.0)
 
         self.robot_home_position()
 
         # this is to reduce the oscillation
-        desire_position = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.34)
+        desire_position = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.66)
         touch_ground_move_pose = prepare_point((desire_position + self.home_orientation))
         self.robot.movel(touch_ground_move_pose, vel=0.2, acc=1.0)
         time.sleep(2)
 
+        self.robot_home_position()
 
 
 
@@ -135,11 +137,18 @@ class Environment:
 
         # pose 3
         desire_position_3 = (self.home_position[0], self.home_position[1], self.home_position[2])
-        desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+        desire_orientation_3 = (self.home_orientation[0], self.home_orientation[1]+40, self.home_orientation[2])
         desire_pose_3 = self.check_point((desire_position_3 + desire_orientation_3))
         self.robot.movel(desire_pose_3, acc=self.acc, vel=self.vel)
 
-        # self.robot.movels([desire_pose_1, desire_pose_2], vel=self.vel, acc=self.acc, radius=0.01)
+        # pose 4
+        desire_position_4 = (self.home_position[0], self.home_position[1], self.home_position[2])
+        desire_orientation_4 = (self.home_orientation[0], self.home_orientation[1], self.home_orientation[2])
+        desire_pose_4 = self.check_point((desire_position_4 + desire_orientation_4))
+        self.robot.movel(desire_pose_4, acc=self.acc, vel=self.vel)
+
+
+        #self.robot.movels([desire_pose_1, desire_pose_2, desire_pose_3], vel=self.vel, acc=self.acc, radius=0.01)
 
 
     def get_state(self):

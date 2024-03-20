@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 import collections
 collections.Iterable = collections.abc.Iterable # Need this for math3d lib issues
 from environment.main_environment_ur5 import Environment
+import time
 
 
 def read_config_file():
@@ -28,7 +29,7 @@ def main():
     #env.starting_position()  # just making sure the joint are in the right position for initialization
 
     env.robot_home_position()
-    for i in range(1):
+    for i in range(10):
         env.hard_code_solution()
         env.reset_task()
     env.robot_home_position()
