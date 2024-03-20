@@ -1,6 +1,8 @@
 import math
 import random
 import logging
+import time
+
 logging.basicConfig(level=logging.INFO)
 import collections
 collections.Iterable = collections.abc.Iterable # Need this for math3d lib issues
@@ -78,13 +80,33 @@ class Environment:
 
     def starting_position(self):
         initial_position = (math.radians(90), math.radians(-90), math.radians(90), math.radians(0), math.radians(90), math.radians(0))  # Joint in rad for home position
-        self.robot.movej(initial_position, vel=self.vel, acc=self.acc, wait=True)
+        self.robot.movej(initial_position, vel=0.1, acc=1.0, wait=True) # different speed for safety reasons
         logging.info("Robot at initial position")
 
     def robot_home_position(self):
         desire_pose = prepare_point((self.home_position + self.home_orientation))
-        self.robot.movel(desire_pose, acc=self.acc, vel=self.vel)
+        self.robot.movel(desire_pose, vel=0.2, acc=1.0) # different speed for safety reasons
         logging.info("Robot at home position")
+
+    def reset_task(self):
+        #self.robot_home_position()
+
+        # todo, can add if statement when the sensor is mounted, If ball in cup do
+        desire_orientation = (self.home_orientation[0], self.home_orientation[1] + 140, self.home_orientation[2])
+        rotate_move_pose = prepare_point((self.home_position + desire_orientation))
+        self.robot.movel(rotate_move_pose, vel=0.2, acc=1.0)
+
+        self.robot_home_position()
+
+        # this is to reduce the oscillation
+        desire_position = (self.home_position[0], self.home_position[1], self.home_position[2] - 0.34)
+        touch_ground_move_pose = prepare_point((desire_position + self.home_orientation))
+        self.robot.movel(touch_ground_move_pose, vel=0.2, acc=1.0)
+        time.sleep(2)
+
+
+
+
 
     def get_sample_pose(self):
         desire_position = self.sample_position()  # (x, y, z) w.r.t to the base

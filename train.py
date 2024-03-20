@@ -22,15 +22,15 @@ def main():
     ip_address_robot = config['ip_robot']
 
     # robot = urx.Robot(ip_address_robot, use_rt=True, urFirm=config['urFirm'])
+
     robot = urx.Robot(ip_address_robot)
     env = Environment(robot, velocity=config['velocity'], acceleration=config['acceleration'])
-
-    env.starting_position()  # just making sure the joint are in the right position for initialization
+    #env.starting_position()  # just making sure the joint are in the right position for initialization
 
     env.robot_home_position()
     for i in range(1):
         env.hard_code_solution()
-
+        env.reset_task()
     env.robot_home_position()
 
     robot.close()
